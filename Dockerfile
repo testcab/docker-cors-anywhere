@@ -1,9 +1,10 @@
 FROM node:12-alpine
 
 ENV NODE_ENV=production
+ENV NODE_PATH=/usr/local/lib/node_modules
 ARG version=latest
 RUN npm install -g cors-anywhere@$version
-WORKDIR /usr/local/lib/node_modules
-CMD ["node", "cors-anywhere/server.js"]
+COPY server.js .
+CMD ["node", "server.js"]
 
 EXPOSE 8080

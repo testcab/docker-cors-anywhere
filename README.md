@@ -14,6 +14,14 @@ docker run --rm testcab/cors-anywhere
 ```
 
 
+### Envirionment Variables
+
+Env  | Default | Description
+---- | ------- | -----------
+KEY  |         | TLS Key
+CERT |         | TLS Certificate
+
+
 ## LICENSE
 
 This repository is licensed under [MIT](LICENSE).
