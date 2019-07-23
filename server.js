@@ -1,3 +1,5 @@
+var fs = require('fs')
+
 // Listen on a specific host via the HOST environment variable
 var host = process.env.HOST || '0.0.0.0';
 // Listen on a specific port via the PORT environment variable
@@ -21,8 +23,16 @@ var checkRateLimit = require('cors-anywhere/lib/rate-limit')(process.env.CORSANY
 
 if (process.env.KEY || process.env.CERT) {
   var httpsOptions = {
-    key: process.env.KEY,
-    cert: process.env.CERT,
+    key: readTLSContent(process.env.KEY),
+    cert: readTLSContent(process.env.CERT),
+  };
+}
+
+function readTLSContent(tls) {
+  if (tls.startsWith('-----')) {
+    return tls
+  } else {
+    return fs.readFileSync(tls);
   };
 }
 
