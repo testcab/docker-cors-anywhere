@@ -8,10 +8,15 @@ The docker image for [cors-anywhere](https://github.com/Rob--W/cors-anywhere).
 
 ### Run
 
-
 ```
 docker run --rm testcab/cors-anywhere
 ```
+
+
+### Supported tags and respective `Dockerfile` links
+
+* [`0.4.4`, `latest`](https://github.com/testcab/docker-cors-anywhere/blob/master/Dockerfile)
+* [`0.4.3`](https://github.com/testcab/docker-cors-anywhere/blob/0.4.3/Dockerfile)
 
 
 ### Envirionment Variables
