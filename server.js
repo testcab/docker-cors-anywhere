@@ -36,21 +36,24 @@ function readTLSContent(tls) {
   };
 }
 
+var removeExtraHeaders = parseEnvList(process.env.CORSANYWHERE_REMOVE_HEADERS);
+var removeHeaders = [
+  'cookie',
+  'cookie2',
+  // Strip Heroku-specific headers
+  'x-heroku-queue-wait-time',
+  'x-heroku-queue-depth',
+  'x-heroku-dynos-in-use',
+  'x-request-start',
+].concat(removeExtraHeaders);
+
 var cors_proxy = require('cors-anywhere');
-cors_proxy.createServer({
+var server = cors_proxy.createServer({
   originBlacklist: originBlacklist,
   originWhitelist: originWhitelist,
   requireHeader: ['origin', 'x-requested-with'],
   checkRateLimit: checkRateLimit,
-  removeHeaders: [
-    'cookie',
-    'cookie2',
-    // Strip Heroku-specific headers
-    'x-heroku-queue-wait-time',
-    'x-heroku-queue-depth',
-    'x-heroku-dynos-in-use',
-    'x-request-start',
-  ],
+  removeHeaders: removeHeaders,
   redirectSameOrigin: true,
   httpProxyOptions: {
     // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
@@ -60,3 +63,11 @@ cors_proxy.createServer({
 }).listen(port, host, function() {
   console.log('Running CORS Anywhere on ' + host + ':' + port);
 });
+
+function gracefulShutdown(){
+  server.close(function(){
+    process.exit();
+  });
+}
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
